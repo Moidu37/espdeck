@@ -9,6 +9,10 @@ import ssd1306
 i2c = I2C(0, scl=Pin(2), sda=Pin(1), freq=400000)
 oled = ssd1306.SSD1306_I2C(128, 64, i2c)
 
+red = Pin(9, Pin.OUT)
+green = Pin(10, Pin.OUT)
+blue = Pin(11, Pin.OUT)
+
 pc_stats = {"CPU": "0%", "RAM": "0%", "GPU": "0%", "BAT": "0%"}
 
 oled.fill(0)
@@ -122,6 +126,7 @@ async def button_task():
         try:
             if conn_handle is not None:
                 if button_mute.value() == 0:
+                    red.on()
                     print("[HARDWARE] Bouton MUTE détecté !")
                     ble.gatts_notify(conn_handle, char_handle, b"MUTE")
                     print("[BLE] Signal MUTE envoyé !")
