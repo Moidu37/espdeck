@@ -122,11 +122,17 @@ start_advertising()
 # -----------------------------
 
 async def button_task():
+    is_mute = False
     while True:
         try:
             if conn_handle is not None:
                 if button_mute.value() == 0:
-                    red.on()
+                    if is_mute:
+                        red.on()
+                        is_mute = False
+                    if is_mute == False:
+                        red.off()
+                        is_mute == True
                     print("[HARDWARE] Bouton MUTE détecté !")
                     ble.gatts_notify(conn_handle, char_handle, b"MUTE")
                     print("[BLE] Signal MUTE envoyé !")
